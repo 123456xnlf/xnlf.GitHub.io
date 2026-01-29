@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>友情测试</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- 配置Tailwind自定义颜色 - 黑色极简风格 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#000000', // 纯黑
+                        secondary: '#111111', // 近黑色
+                        accent: '#ffffff', // 白色
+                        light: '#f8f8f8', // 近白色
+                        gray: {
+                            100: '#f8f8f8',
+                            200: '#e5e5e5',
+                            300: '#d4d4d4',
+                            400: '#a3a3a3',
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- 自定义工具类 - 黑色极简风格 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .btn-transition {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .scale-animation {
+                animation: scale 0.5s ease-out;
+            }
+            .confetti {
+                position: absolute;
+                opacity: 0;
+            }
+            .bg-blur {
+                backdrop-filter: blur(8px);
+            }
+            .typing-cursor {
+                border-right: 2px solid #ffffff;
+                animation: blink 1s step-end infinite;
+            }
+            .text-reveal {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 0.8s ease, transform 0.8s ease;
+            }
+            .text-reveal.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes scale {
+            0% { transform: scale(0.8); opacity: 0; }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: #ffffff; }
+        }
+        
+        /* 鼠标跟随效果 */
+        @keyframes followMouse {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            10% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            90% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+        }
+        
+        .mouse-follower {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            animation: followMouse 1.5s ease-out forwards;
+        }
+        
+        /* 庆祝动画 */
+        @keyframes celebrate {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .celebrate-animation {
+            animation: celebrate 0.8s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 bg-black text-white transition-all duration-700 overflow-x-hidden relative">
+    <!-- 鼠标跟随效果容器 -->
+    <div id="mouse-follow-container" class="fixed inset-0 pointer-events-none z-10"></div>
+    
+    <!-- 极简风格装饰线 -->
+    <div class="absolute top-0 left-0 w-full h-px bg-gray-800"></div>
+    <div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+    <div class="absolute top-0 left-0 h-full w-px bg-gray-800"></div>
+    <div class="absolute top-0 right-0 h-full w-px bg-gray-800"></div>
+    
+    <!-- 主容器 -->
+    <div id="app-container" class="w-full max-w-md text-center relative z-10">
+        <!-- 问题区域 -->
+        <div id="question-container" class="mb-12 p-6 md:p-8 bg-secondary rounded-lg shadow-lg border border-gray-800 scale-animation">
+            <!-- 极简风格标题 -->
+            <div class="mb-8">
+                <h2 class="text-[clamp(1.2rem,4vw,1.8rem)] font-light text-white tracking-wider">友情测试</h2>
+                <div class="mt-2 h-px w-16 mx-auto bg-gray-600"></div>
+            </div>
+            
+            <h1 id="question-text" class="text-[clamp(1.5rem,5vw,2.5rem)] font-light text-white transition-all duration-700">
+                你愿意给我买豪华别墅吗
+            </h1>
+            
+            <!-- 底部装饰线 -->
+            <div class="mt-6 h-px w-24 mx-auto bg-gray-700"></div>
+        </div>
+        
+        <!-- 按钮区域 -->
+        <div id="buttons-container" class="flex justify-center gap-6">
+            <button id="yes-btn" class="btn-transition bg-white text-black hover:bg-gray-200 font-light py-3 px-8 rounded-none border border-gray-700 hover:border-white focus:outline-none focus:ring-1 focus:ring-white transition-all duration-300">
+                必须的！
+            </button>
+            <button id="no-btn" class="btn-transition bg-transparent text-white hover:bg-gray-800 font-light py-3 px-8 rounded-none border border-gray-700 hover:border-white focus:outline-none focus:ring-1 focus:ring-white transition-all duration-300">
+                等等再说
+            </button>
+        </div>
+        
+        <!-- 庆祝区域 (初始隐藏) -->
+        <div id="celebration-container" class="hidden celebrate-animation">
+            <div class="p-8 bg-secondary rounded-lg shadow-lg border border-gray-800">
+                <h2 class="text-[clamp(1.5rem,5vw,2.2rem)] font-light text-white mb-6">
+                    太感谢你了！
+                </h2>
+                <p class="text-base text-gray-400 mb-8 max-w-xs mx-auto">
+                    我就知道你对我最好了！我们的友情经得起考验。
+                </p>
+                
+                <button id="restart-btn" class="btn-transition bg-white text-black hover:bg-gray-200 font-light py-3 px-8 rounded-none border border-gray-700 hover:border-white focus:outline-none focus:ring-1 focus:ring-white transition-all duration-300">
+                    再来一次
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 追问语句列表 - 极简风格
+        const followUpQuestions = [
+            "那请我喝杯咖啡总可以吧？",
+            "考虑一下嘛，友情的见证。",
+            "别这么小气嘛，我们可是朋友。",
+            "打折的也行啊！",
+            "分期付款怎么样？",
+            "那下次我请你，你请我别墅？",
+            "租一个也行啊！",
+            "要不先预定一个参观名额？",
+            "友情价买一个？",
+            "那送个小礼物总可以吧？"
+        ];
+        
+        // DOM元素
+        const questionContainer = document.getElementById('question-container');
+        const questionText = document.getElementById('question-text');
+        const buttonsContainer = document.getElementById('buttons-container');
+        const yesBtn = document.getElementById('yes-btn');
+        const noBtn = document.getElementById('no-btn');
+        const celebrationContainer = document.getElementById('celebration-container');
+        const restartBtn = document.getElementById('restart-btn');
+        
+        // 初始问题
+        const initialQuestion = "你愿意给我买豪华别墅吗";
+        
+        // 生成随机位置 (确保按钮不重叠且在可视范围内)
+        function getRandomPosition(button) {
+            // 获取视口尺寸
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            
+            // 获取按钮尺寸
+            const buttonWidth = button.offsetWidth;
+            const buttonHeight = button.offsetHeight;
+            
+            // 获取问题区域位置和尺寸
+            const questionRect = questionContainer.getBoundingClientRect();
+            
+            // 计算可用区域 (避开问题区域)
+            let maxX = viewportWidth - buttonWidth - 20; // 留出边距
+            let maxY = viewportHeight - buttonHeight - 20;
+            const minX = 20;
+            const minY = 20;
+            
+            // 生成随机位置
+            let x = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
+            let y = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
+            
+            // 检查是否与问题区域重叠，如果重叠则重新生成
+            if (
+                x < questionRect.right &&
+                x + buttonWidth > questionRect.left &&
+                y < questionRect.bottom &&
+                y + buttonHeight > questionRect.top
+            ) {
+                return getRandomPosition(button);
+            }
+            
+            return { x, y };
+        }
+        
+        // 移动按钮到随机位置
+        function moveButtonsRandomly() {
+            // 获取两个按钮的随机位置
+            const yesPos = getRandomPosition(yesBtn);
+            let noPos = getRandomPosition(noBtn);
+            
+            // 确保两个按钮不重叠
+            const yesRect = {
+                x: yesPos.x,
+                y: yesPos.y,
+                width: yesBtn.offsetWidth,
+                height: yesBtn.offsetHeight
+            };
+            
+            // 检查两个按钮是否重叠，如果重叠则重新生成"等等再说"按钮的位置
+            while (
+                noPos.x < yesRect.x + yesRect.width &&
+                noPos.x + noBtn.offsetWidth > yesRect.x &&
+                noPos.y < yesRect.y + yesRect.height &&
+                noPos.y + noBtn.offsetHeight > yesRect.y
+            ) {
+                noPos = getRandomPosition(noBtn);
+            }
+            
+            // 应用位置和动画
+            yesBtn.style.position = 'fixed';
+            yesBtn.style.left = `${yesPos.x}px`;
+            yesBtn.style.top = `${yesPos.y}px`;
+            yesBtn.classList.add('scale-animation');
+            setTimeout(() => yesBtn.classList.remove('scale-animation'), 500);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = `${noPos.x}px`;
+            noBtn.style.top = `${noPos.y}px`;
+            noBtn.classList.add('scale-animation');
+            setTimeout(() => noBtn.classList.remove('scale-animation'), 500);
+        }
+        
+        // 显示庆祝画面
+        function showCelebration() {
+            // 隐藏问题和按钮
+            questionContainer.classList.add('hidden');
+            buttonsContainer.classList.add('hidden');
+            
+            // 显示庆祝画面
+            celebrationContainer.classList.remove('hidden');
+            
+            // 创建庆祝动画
+            createCelebrationElements();
+        }
+        
+        // 创建极简风格庆祝效果
+        function createCelebrationElements() {
+            const container = document.body;
+            const shapes = ['circle', 'square', 'line'];
+            
+            for (let i = 0; i < 50; i++) {
+                const element = document.createElement('div');
+                element.classList.add('confetti');
+                
+                // 随机形状
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                if (shape === 'circle') {
+                    element.style.width = `${Math.random() * 8 + 2}px`;
+                    element.style.height = element.style.width;
+                    element.style.borderRadius = '50%';
+                } else if (shape === 'square') {
+                    element.style.width = `${Math.random() * 8 + 2}px`;
+                    element.style.height = element.style.width;
+                } else {
+                    element.style.width = `${Math.random() * 12 + 4}px`;
+                    element.style.height = '1px';
+                }
+                
+                // 黑白灰配色
+                const colors = ['#ffffff', '#e5e5e5', '#a3a3a3', '#525252'];
+                element.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                element.style.left = `${Math.random() * 100}%`;
+                element.style.top = `-${Math.random() * 20 + 10}px`;
+                element.style.transform = `rotate(${Math.random() * 360}deg)`;
+                element.style.animation = `fall ${Math.random() * 4 + 3}s linear forwards`;
+                
+                container.appendChild(element);
+                
+                // 动画结束后移除
+                setTimeout(() => {
+                    element.remove();
+                }, 7000);
+            }
+            
+            // 添加下落动画样式
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fall {
+                    0% {
+                        transform: translateY(0) rotate(0deg);
+                        opacity: 0.8;
+                    }
+                    100% {
+                        transform: translateY(${window.innerHeight}px) rotate(360deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // 显示下一个追问
+        function showNextQuestion() {
+            // 随机选择一个追问
+            const randomIndex = Math.floor(Math.random() * followUpQuestions.length);
+            const nextQuestion = followUpQuestions[randomIndex];
+            
+            // 更新问题文本并添加动画
+            questionText.textContent = nextQuestion;
+            questionText.classList.add('scale-animation');
+            setTimeout(() => {
+                questionText.classList.remove('scale-animation');
+            }, 500);
+            
+            // 移动按钮到随机位置
+            moveButtonsRandomly();
+        }
+        
+        // 重置游戏
+        function resetGame() {
+            // 恢复初始状态
+            questionText.textContent = initialQuestion;
+            celebrationContainer.classList.add('hidden');
+            questionContainer.classList.remove('hidden');
+            buttonsContainer.classList.remove('hidden');
+            
+            // 重置按钮样式
+            yesBtn.style.position = 'static';
+            noBtn.style.position = 'static';
+            
+            // 清除所有动画元素
+            document.querySelectorAll('.confetti').forEach(el => {
+                el.remove();
+            });
+        }
+        
+        // 鼠标跟随效果
+        function initMouseFollowEffect() {
+            const container = document.getElementById('mouse-follow-container');
+            let lastX = 0, lastY = 0;
+            const minDistance = 80; // 最小触发距离
+            
+            document.addEventListener('mousemove', (e) => {
+                const currentX = e.clientX;
+                const currentY = e.clientY;
+                
+                // 计算与上次位置的距离
+                const distance = Math.sqrt(
+                    Math.pow(currentX - lastX, 2) + Math.pow(currentY - lastY, 2)
+                );
+                
+                // 如果移动距离足够大，创建新元素
+                if (distance > minDistance) {
+                    createFollowElement(currentX, currentY);
+                    lastX = currentX;
+                    lastY = currentY;
+                }
+            });
+            
+            function createFollowElement(x, y) {
+                const element = document.createElement('div');
+                element.classList.add('mouse-follower');
+                
+                // 随机形状
+                const shapes = ['circle', 'square', 'line'];
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                
+                if (shape === 'circle') {
+                    element.style.width = '4px';
+                    element.style.height = '4px';
+                    element.style.borderRadius = '50%';
+                } else if (shape === 'square') {
+                    element.style.width = '3px';
+                    element.style.height = '3px';
+                } else {
+                    element.style.width = '8px';
+                    element.style.height = '1px';
+                }
+                
+                element.style.backgroundColor = '#ffffff';
+                element.style.left = `${x}px`;
+                element.style.top = `${y}px`;
+                
+                container.appendChild(element);
+                
+                // 动画完成后移除元素
+                setTimeout(() => {
+                    if (element.parentNode) {
+                        element.parentNode.removeChild(element);
+                    }
+                }, 1500);
+            }
+        }
+        
+        // 初始化文字渐入效果
+        function initTextReveal() {
+            const textElements = document.querySelectorAll('#question-text, h2, p');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('text-reveal', 'active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            textElements.forEach(el => {
+                observer.observe(el);
+            });
+        }
+        
+        // 事件监听
+        yesBtn.addEventListener('click', showCelebration);
+        noBtn.addEventListener('click', showNextQuestion);
+        restartBtn.addEventListener('click', resetGame);
+        
+        // 移动端触摸事件支持
+        yesBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            showCelebration();
+        });
+        
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            showNextQuestion();
+        });
+        
+        restartBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            resetGame();
+        });
+        
+        // 初始化鼠标跟随效果
+        initMouseFollowEffect();
+        
+        // 初始化文字渐入效果
+        initTextReveal();
+        
+        // 窗口大小改变时重新定位按钮（如果它们处于随机位置）
+        window.addEventListener('resize', () => {
+            if (noBtn.style.position === 'fixed') {
+                moveButtonsRandomly();
+            }
+        });
+    </script>
+</body>
+</html>

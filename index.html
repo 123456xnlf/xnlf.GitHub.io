@@ -3,22 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>友情测试 | 艺术摄影风</title>
-    <!-- 引入Tailwind CSS -->
+    <title>友情测试合集 | 艺术摄影风</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入Font Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     
-    <!-- 配置Tailwind自定义颜色 - 艺术摄影风格 -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#000000', // 纯黑
-                        secondary: '#111111', // 近黑色
-                        accent: '#ffffff', // 白色
-                        light: '#f8f8f8', // 近白色
+                        primary: '#000000',
+                        secondary: '#111111',
+                        accent: '#ffffff',
                         gray: {
                             100: '#f8f8f8',
                             200: '#e5e5e5',
@@ -36,622 +32,131 @@
                     },
                     animation: {
                         'pulse-slow': 'pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'ping-slow': 'ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite',
-                        'scroll-left': 'scrollLeft 30s linear infinite',
-                        'scroll-right': 'scrollRight 30s linear infinite',
+                        'scale-hover': 'scale-hover 0.3s ease-out forwards',
                     },
                     keyframes: {
                         'pulse-slow': {
                             '0%, 100%': { opacity: 1 },
                             '50%': { opacity: 0.4 },
                         },
-                        'ping-slow': {
-                            '0%': { transform: 'scale(1)', opacity: 1 },
-                            '75%, 100%': { transform: 'scale(2)', opacity: 0 },
-                        },
-                        'scrollLeft': {
-                            '0%': { transform: 'translateX(0)' },
-                            '100%': { transform: 'translateX(-50%)' },
-                        },
-                        'scrollRight': {
-                            '0%': { transform: 'translateX(-50%)' },
-                            '100%': { transform: 'translateX(0)' },
-                        },
-                    },
+                        'scale-hover': {
+                            '0%': { transform: 'scale(1)' },
+                            '100%': { transform: 'scale(1.02)' },
+                        }
+                    }
                 }
             }
         }
     </script>
     
-    <!-- 自定义工具类 - 艺术摄影风格 -->
     <style type="text/tailwindcss">
         @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-            .btn-transition {
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            .scale-animation {
-                animation: scale 0.5s ease-out;
-            }
-            .confetti {
-                position: absolute;
-                opacity: 0;
-            }
             .bg-blur {
                 backdrop-filter: blur(8px);
-            }
-            .text-reveal {
-                opacity: 0;
-                transform: translateY(20px);
-                transition: opacity 0.8s ease, transform 0.8s ease;
-            }
-            .text-reveal.active {
-                opacity: 1;
-                transform: translateY(0);
             }
             .glass-effect {
                 backdrop-filter: blur(10px);
                 background-color: rgba(0, 0, 0, 0.4);
             }
-            .metal-effect {
-                position: relative;
-                overflow: hidden;
+            .card-transition {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
-            .metal-effect::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(0,0,0,0.1) 100%);
-                z-index: 0;
-            }
-        }
-        
-        @keyframes scale {
-            0% { transform: scale(0.8); opacity: 0; }
-            70% { transform: scale(1.05); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        /* 鼠标跟随效果 */
-        @keyframes followMouse {
-            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-            10% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-            90% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-        }
-        
-        .mouse-follower {
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            animation: followMouse 1.5s ease-out forwards;
-        }
-        
-        /* 庆祝动画 */
-        @keyframes celebrate {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        .celebrate-animation {
-            animation: celebrate 0.8s ease-out forwards;
-        }
-        
-        /* 无限滚动动画 */
-        @keyframes scrollLeft {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        
-        @keyframes scrollRight {
-            0% { transform: translateX(-50%); }
-            100% { transform: translateX(0); }
-        }
-        
-        .animate-scroll-left {
-            animation: scrollLeft 30s linear infinite;
-        }
-        
-        .animate-scroll-right {
-            animation: scrollRight 30s linear infinite;
-        }
-        
-        /* 状态指示灯动画 */
-        @keyframes pulse-slow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-        
-        @keyframes ping-slow {
-            0% { transform: scale(1); opacity: 1; }
-            75%, 100% { transform: scale(2); opacity: 0; }
-        }
-        
-        .animate-pulse-slow {
-            animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        
-        .animate-ping-slow {
-            animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 bg-black text-white transition-all duration-700 overflow-x-hidden relative">
+<body class="min-h-screen bg-black text-white p-4 md:p-8 overflow-x-hidden">
     <!-- 背景图片 -->
     <div class="fixed inset-0 z-0">
         <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/b44c977a458e419b978b16902966289a~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260129173231FB34081249C8AF2ABBF4&rrcfp=f06b921b&x-expires=1772271174&x-signature=G%2FRpuSJliUhahKn8IJMJV%2BAHqK0%3D" 
              alt="艺术背景" 
-             class="w-full h-full object-cover opacity-60 filter grayscale">
+             class="w-full h-full object-cover opacity-40 filter grayscale">
     </div>
     
-    <!-- 鼠标跟随效果容器 -->
-    <div id="mouse-follow-container" class="fixed inset-0 pointer-events-none z-10"></div>
-    
-    <!-- 艺术风格装饰线 -->
-    <div class="absolute top-0 left-0 w-full h-px bg-gray-800"></div>
-    <div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
-    <div class="absolute top-0 left-0 h-full w-px bg-gray-800"></div>
-    <div class="absolute top-0 right-0 h-full w-px bg-gray-800"></div>
-    
-    <!-- 状态指示灯 -->
-    <div class="absolute top-6 right-6 z-20 inline-flex items-center gap-3 px-4 py-2 glass-effect rounded-lg border border-gray-800">
-        <div class="relative">
-            <div class="h-3 w-3 rounded-full bg-white/80 animate-pulse-slow"></div>
-            <div class="absolute inset-0 h-3 w-3 rounded-full bg-white/30 animate-ping-slow"></div>
-        </div>
-        <span class="text-sm text-gray-300">友情测试进行中</span>
+    <!-- 头部标题 -->
+    <div class="relative z-10 text-center mb-12 md:mb-16 pt-6">
+        <h1 class="text-[clamp(1.8rem,6vw,3rem)] font-light tracking-widest">友情测试合集</h1>
+        <div class="mt-4 h-px w-24 mx-auto bg-gray-600"></div>
+        <p class="mt-6 text-gray-400 text-sm md:text-base max-w-md mx-auto">
+            选择一个测试，检验你和朋友的友情深厚程度吧～
+        </p>
     </div>
     
-    <!-- 主容器 -->
-    <div id="app-container" class="w-full max-w-md text-center relative z-10">
-        <!-- 问题区域 -->
-        <div id="question-container" class="mb-12 p-6 md:p-8 glass-effect rounded-lg shadow-lg border border-gray-800 scale-animation backdrop-blur-md">
-            <!-- 艺术风格标题 -->
-            <div class="mb-8">
-                <h2 class="text-[clamp(1.2rem,4vw,1.8rem)] font-light text-white tracking-widest">友情测试</h2>
-                <div class="mt-2 h-px w-16 mx-auto bg-gray-600"></div>
+    <!-- 测试卡片容器 -->
+    <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+        <!-- 测试1卡片 -->
+        <a href="test1.html" class="block">
+            <div class="glass-effect border border-gray-800 rounded-lg p-6 card-transition hover:shadow-lg hover:border-gray-700 hover:animate-scale-hover">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs text-gray-400">测试 01</span>
+                    <i class="fa fa-home text-gray-500"></i>
+                </div>
+                <h3 class="text-xl font-light mb-2">豪华别墅测试</h3>
+                <p class="text-gray-400 text-sm mb-4">你愿意给我买豪华别墅吗？</p>
+                <div class="h-px w-full bg-gray-800 mb-4"></div>
+                <span class="text-xs text-gray-300">点击进入测试 →</span>
             </div>
-            
-            <h1 id="question-text" class="text-[clamp(1.5rem,5vw,2.5rem)] font-light text-white transition-all duration-700 mb-6">
-                你愿意给我买豪华别墅吗
-            </h1>
-            
-            <!-- 底部装饰线 -->
-            <div class="mt-4 h-px w-24 mx-auto bg-gray-700"></div>
-        </div>
+        </a>
         
-        <!-- 按钮区域 -->
-        <div id="buttons-container" class="flex justify-center gap-6">
-            <!-- 毛玻璃金属按钮 - 必须的 -->
-            <button id="yes-btn" class="group relative overflow-hidden rounded-lg p-[1px]">
-                <!-- 发光边框层 -->
-                <div class="absolute inset-0 bg-gradient-to-br from-gray-600/80 to-gray-700/80 backdrop-blur-lg">
-                    <!-- 右上角发光效果 -->
-                    <div class="absolute -top-4 -right-4 h-12 w-12 rounded-full bg-white/40 blur-md transition-all duration-300 group-hover:h-16 group-hover:w-16 group-hover:bg-white/60"></div>
-                    <!-- 左下角发光效果 -->
-                    <div class="absolute -bottom-6 -left-4 h-10 w-10 rounded-full bg-white/30 blur-md transition-all duration-300 group-hover:h-14 group-hover:w-14 group-hover:bg-white/50"></div>
+        <!-- 测试2卡片 -->
+        <a href="test2.html" class="block">
+            <div class="glass-effect border border-gray-800 rounded-lg p-6 card-transition hover:shadow-lg hover:border-gray-700 hover:animate-scale-hover">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs text-gray-400">测试 02</span>
+                    <i class="fa fa-coffee text-gray-500"></i>
                 </div>
-                
-                <!-- 按钮内容 -->
-                <div class="relative px-8 py-3 bg-black/40 backdrop-blur-sm rounded-lg border border-gray-700">
-                    <span class="relative z-10 text-white font-light tracking-wide">必须的！</span>
-                </div>
-            </button>
-            
-            <!-- 毛玻璃金属按钮 - 等等再说 -->
-            <button id="no-btn" class="group relative overflow-hidden rounded-lg p-[1px]">
-                <!-- 发光边框层 -->
-                <div class="absolute inset-0 bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-lg">
-                    <!-- 右上角发光效果 -->
-                    <div class="absolute -top-4 -right-4 h-12 w-12 rounded-full bg-white/20 blur-md transition-all duration-300 group-hover:h-16 group-hover:w-16 group-hover:bg-white/40"></div>
-                    <!-- 左下角发光效果 -->
-                    <div class="absolute -bottom-6 -left-4 h-10 w-10 rounded-full bg-white/10 blur-md transition-all duration-300 group-hover:h-14 group-hover:w-14 group-hover:bg-white/30"></div>
-                </div>
-                
-                <!-- 按钮内容 -->
-                <div class="relative px-8 py-3 bg-black/60 backdrop-blur-sm rounded-lg border border-gray-800">
-                    <span class="relative z-10 text-gray-300 font-light tracking-wide">等等再说</span>
-                </div>
-            </button>
-        </div>
-        
-        <!-- 庆祝区域 (初始隐藏) -->
-        <div id="celebration-container" class="hidden celebrate-animation">
-            <div class="p-8 glass-effect rounded-lg shadow-lg border border-gray-800 backdrop-blur-md">
-                <h2 class="text-[clamp(1.5rem,5vw,2.2rem)] font-light text-white mb-6">
-                    太感谢你了！
-                </h2>
-                <p class="text-base text-gray-400 mb-8 max-w-xs mx-auto">
-                    我就知道你对我最好了！我们的友情经得起考验。
-                </p>
-                
-                <!-- 毛玻璃金属按钮 - 再来一次 -->
-                <button id="restart-btn" class="group relative overflow-hidden rounded-lg p-[1px]">
-                    <!-- 发光边框层 -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-gray-600/80 to-gray-700/80 backdrop-blur-lg">
-                        <!-- 右上角发光效果 -->
-                        <div class="absolute -top-4 -right-4 h-12 w-12 rounded-full bg-white/40 blur-md transition-all duration-300 group-hover:h-16 group-hover:w-16 group-hover:bg-white/60"></div>
-                        <!-- 左下角发光效果 -->
-                        <div class="absolute -bottom-6 -left-4 h-10 w-10 rounded-full bg-white/30 blur-md transition-all duration-300 group-hover:h-14 group-hover:w-14 group-hover:bg-white/50"></div>
-                    </div>
-                    
-                    <!-- 按钮内容 -->
-                    <div class="relative px-8 py-3 bg-black/40 backdrop-blur-sm rounded-lg border border-gray-700">
-                        <span class="relative z-10 text-white font-light tracking-wide">再来一次</span>
-                    </div>
-                </button>
+                <h3 class="text-xl font-light mb-2">限量奶茶测试</h3>
+                <p class="text-gray-400 text-sm mb-4">你愿意给我买限量款奶茶吗？</p>
+                <div class="h-px w-full bg-gray-800 mb-4"></div>
+                <span class="text-xs text-gray-300">点击进入测试 →</span>
             </div>
-        </div>
+        </a>
+        
+        <!-- 测试3卡片 -->
+        <a href="test3.html" class="block">
+            <div class="glass-effect border border-gray-800 rounded-lg p-6 card-transition hover:shadow-lg hover:border-gray-700 hover:animate-scale-hover">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs text-gray-400">测试 03</span>
+                    <i class="fa fa-television text-gray-500"></i>
+                </div>
+                <h3 class="text-xl font-light mb-2">熬夜追剧测试</h3>
+                <p class="text-gray-400 text-sm mb-4">你愿意陪我熬夜追完一整部剧吗？</p>
+                <div class="h-px w-full bg-gray-800 mb-4"></div>
+                <span class="text-xs text-gray-300">点击进入测试 →</span>
+            </div>
+        </a>
+        
+        <!-- 测试4卡片 -->
+        <a href="test4.html" class="block">
+            <div class="glass-effect border border-gray-800 rounded-lg p-6 card-transition hover:shadow-lg hover:border-gray-700 hover:animate-scale-hover">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs text-gray-400">测试 04</span>
+                    <i class="fa fa-cut text-gray-500"></i>
+                </div>
+                <h3 class="text-xl font-light mb-2">拼多多砍一刀测试</h3>
+                <p class="text-gray-400 text-sm mb-4">你愿意帮我拼多多砍一刀吗？</p>
+                <div class="h-px w-full bg-gray-800 mb-4"></div>
+                <span class="text-xs text-gray-300">点击进入测试 →</span>
+            </div>
+        </a>
+        
+        <!-- 测试5卡片 -->
+        <a href="test5.html" class="block">
+            <div class="glass-effect border border-gray-800 rounded-lg p-6 card-transition hover:shadow-lg hover:border-gray-700 hover:animate-scale-hover">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs text-gray-400">测试 05</span>
+                    <i class="fa fa-money text-gray-500"></i>
+                </div>
+                <h3 class="text-xl font-light mb-2">零花钱测试</h3>
+                <p class="text-gray-400 text-sm mb-4">你愿意借我点零花钱应急吗？</p>
+                <div class="h-px w-full bg-gray-800 mb-4"></div>
+                <span class="text-xs text-gray-300">点击进入测试 →</span>
+            </div>
+        </a>
     </div>
     
-    <script>
-        // 追问语句列表 - 艺术摄影风格
-        const followUpQuestions = [
-            "那请我喝杯咖啡总可以吧？",
-            "考虑一下嘛，友情的见证。",
-            "别这么小气嘛，我们可是朋友。",
-            "打折的也行啊！",
-            "分期付款怎么样？",
-            "那下次我请你，你请我别墅？",
-            "租一个也行啊！",
-            "要不先预定一个参观名额？",
-            "友情价买一个？",
-            "那送个小礼物总可以吧？"
-        ];
-        
-        // DOM元素
-        const questionContainer = document.getElementById('question-container');
-        const questionText = document.getElementById('question-text');
-        const buttonsContainer = document.getElementById('buttons-container');
-        const yesBtn = document.getElementById('yes-btn');
-        const noBtn = document.getElementById('no-btn');
-        const celebrationContainer = document.getElementById('celebration-container');
-        const restartBtn = document.getElementById('restart-btn');
-        
-        // 初始问题
-        const initialQuestion = "你愿意给我买豪华别墅吗";
-        
-        // 生成随机位置 (确保按钮不重叠且在可视范围内)
-        function getRandomPosition(button) {
-            // 获取视口尺寸
-            const viewportWidth = window.innerWidth;
-            const viewportHeight = window.innerHeight;
-            
-            // 获取按钮尺寸
-            const buttonWidth = button.offsetWidth;
-            const buttonHeight = button.offsetHeight;
-            
-            // 获取问题区域位置和尺寸
-            const questionRect = questionContainer.getBoundingClientRect();
-            
-            // 计算可用区域 (避开问题区域)
-            let maxX = viewportWidth - buttonWidth - 20; // 留出边距
-            let maxY = viewportHeight - buttonHeight - 20;
-            const minX = 20;
-            const minY = 20;
-            
-            // 生成随机位置
-            let x = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
-            let y = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
-            
-            // 检查是否与问题区域重叠，如果重叠则重新生成
-            if (
-                x < questionRect.right &&
-                x + buttonWidth > questionRect.left &&
-                y < questionRect.bottom &&
-                y + buttonHeight > questionRect.top
-            ) {
-                return getRandomPosition(button);
-            }
-            
-            return { x, y };
-        }
-        
-        // 移动按钮到随机位置
-        function moveButtonsRandomly() {
-            // 获取两个按钮的随机位置
-            const yesPos = getRandomPosition(yesBtn);
-            let noPos = getRandomPosition(noBtn);
-            
-            // 确保两个按钮不重叠
-            const yesRect = {
-                x: yesPos.x,
-                y: yesPos.y,
-                width: yesBtn.offsetWidth,
-                height: yesBtn.offsetHeight
-            };
-            
-            // 检查两个按钮是否重叠，如果重叠则重新生成"等等再说"按钮的位置
-            while (
-                noPos.x < yesRect.x + yesRect.width &&
-                noPos.x + noBtn.offsetWidth > yesRect.x &&
-                noPos.y < yesRect.y + yesRect.height &&
-                noPos.y + noBtn.offsetHeight > yesRect.y
-            ) {
-                noPos = getRandomPosition(noBtn);
-            }
-            
-            // 应用位置和动画
-            yesBtn.style.position = 'fixed';
-            yesBtn.style.left = `${yesPos.x}px`;
-            yesBtn.style.top = `${yesPos.y}px`;
-            yesBtn.classList.add('scale-animation');
-            setTimeout(() => yesBtn.classList.remove('scale-animation'), 500);
-            
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = `${noPos.x}px`;
-            noBtn.style.top = `${noPos.y}px`;
-            noBtn.classList.add('scale-animation');
-            setTimeout(() => noBtn.classList.remove('scale-animation'), 500);
-        }
-        
-        // 显示庆祝画面
-        function showCelebration() {
-            // 隐藏问题和按钮
-            questionContainer.classList.add('hidden');
-            buttonsContainer.classList.add('hidden');
-            
-            // 显示庆祝画面
-            celebrationContainer.classList.remove('hidden');
-            
-            // 创建庆祝动画
-            createCelebrationElements();
-        }
-        
-        // 创建艺术摄影风格庆祝效果
-        function createCelebrationElements() {
-            const container = document.body;
-            const shapes = ['circle', 'square', 'line'];
-            
-            for (let i = 0; i < 80; i++) {
-                const element = document.createElement('div');
-                element.classList.add('confetti');
-                
-                // 随机形状
-                const shape = shapes[Math.floor(Math.random() * shapes.length)];
-                if (shape === 'circle') {
-                    element.style.width = `${Math.random() * 10 + 3}px`;
-                    element.style.height = element.style.width;
-                    element.style.borderRadius = '50%';
-                } else if (shape === 'square') {
-                    element.style.width = `${Math.random() * 10 + 3}px`;
-                    element.style.height = element.style.width;
-                } else {
-                    element.style.width = `${Math.random() * 15 + 5}px`;
-                    element.style.height = '1px';
-                }
-                
-                // 黑白灰配色，增加一些透明度变化
-                const colors = ['#ffffff', '#e5e5e5', '#a3a3a3', '#525252'];
-                element.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                element.style.opacity = Math.random() * 0.7 + 0.3; // 0.3-1.0的透明度
-                
-                element.style.left = `${Math.random() * 100}%`;
-                element.style.top = `-${Math.random() * 20 + 10}px`;
-                element.style.transform = `rotate(${Math.random() * 360}deg)`;
-                element.style.animation = `fall ${Math.random() * 5 + 3}s linear forwards`;
-                
-                container.appendChild(element);
-                
-                // 动画结束后移除
-                setTimeout(() => {
-                    if (element.parentNode) {
-                        element.parentNode.removeChild(element);
-                    }
-                }, 8000);
-            }
-            
-            // 添加下落动画样式
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes fall {
-                    0% {
-                        transform: translateY(0) rotate(0deg);
-                        opacity: 0.8;
-                    }
-                    100% {
-                        transform: translateY(${window.innerHeight}px) rotate(360deg);
-                        opacity: 0;
-                    }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-        
-        // 显示下一个追问
-        function showNextQuestion() {
-            // 随机选择一个追问
-            const randomIndex = Math.floor(Math.random() * followUpQuestions.length);
-            const nextQuestion = followUpQuestions[randomIndex];
-            
-            // 更新问题文本并添加动画
-            questionText.textContent = nextQuestion;
-            questionText.classList.add('scale-animation');
-            setTimeout(() => {
-                questionText.classList.remove('scale-animation');
-            }, 500);
-            
-            // 移动按钮到随机位置
-            moveButtonsRandomly();
-        }
-        
-        // 重置游戏
-        function resetGame() {
-            // 恢复初始状态
-            questionText.textContent = initialQuestion;
-            celebrationContainer.classList.add('hidden');
-            questionContainer.classList.remove('hidden');
-            buttonsContainer.classList.remove('hidden');
-            
-            // 重置按钮样式
-            yesBtn.style.position = 'static';
-            noBtn.style.position = 'static';
-            
-            // 清除所有动画元素
-            document.querySelectorAll('.confetti').forEach(el => {
-                el.remove();
-            });
-        }
-        
-        // 鼠标跟随效果 - 艺术摄影风格
-        function initMouseFollowEffect() {
-            const container = document.getElementById('mouse-follow-container');
-            let lastX = 0, lastY = 0;
-            const minDistance = 60; // 最小触发距离
-            
-            document.addEventListener('mousemove', (e) => {
-                const currentX = e.clientX;
-                const currentY = e.clientY;
-                
-                // 计算与上次位置的距离
-                const distance = Math.sqrt(
-                    Math.pow(currentX - lastX, 2) + Math.pow(currentY - lastY, 2)
-                );
-                
-                // 如果移动距离足够大，创建新元素
-                if (distance > minDistance) {
-                    createFollowElement(currentX, currentY);
-                    lastX = currentX;
-                    lastY = currentY;
-                }
-            });
-            
-            function createFollowElement(x, y) {
-                const element = document.createElement('div');
-                element.classList.add('mouse-follower');
-                
-                // 随机形状
-                const shapes = ['circle', 'square', 'line'];
-                const shape = shapes[Math.floor(Math.random() * shapes.length)];
-                
-                if (shape === 'circle') {
-                    element.style.width = '6px';
-                    element.style.height = '6px';
-                    element.style.borderRadius = '50%';
-                } else if (shape === 'square') {
-                    element.style.width = '5px';
-                    element.style.height = '5px';
-                } else {
-                    element.style.width = '12px';
-                    element.style.height = '1px';
-                }
-                
-                // 随机透明度
-                const opacity = Math.random() * 0.5 + 0.3;
-                element.style.backgroundColor = `rgba(255, 255, 255, ${opacity})`;
-                element.style.left = `${x}px`;
-                element.style.top = `${y}px`;
-                
-                container.appendChild(element);
-                
-                // 动画完成后移除元素
-                setTimeout(() => {
-                    if (element.parentNode) {
-                        element.parentNode.removeChild(element);
-                    }
-                }, 1500);
-            }
-        }
-        
-        // 初始化文字渐入效果 - 艺术摄影风格
-        function initTextReveal() {
-            const textElements = document.querySelectorAll('#question-text, h2, p');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('text-reveal', 'active');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-            
-            textElements.forEach(el => {
-                observer.observe(el);
-            });
-        }
-        
-        // 添加无限滚动标签效果
-        function initInfiniteScrollTags() {
-            // 创建标签容器
-            const tagsContainer = document.createElement('div');
-            tagsContainer.className = 'fixed bottom-6 left-0 w-full z-20 pointer-events-none';
-            tagsContainer.innerHTML = `
-                <!-- 无限滚动容器 -->
-                <div class="relative w-full max-w-screen-xl mx-auto overflow-hidden py-4">
-                    <!-- 左侧渐变遮罩 -->
-                    <div class="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-black to-transparent z-10"></div>
-                
-                    <!-- 向左滚动的标签行 -->
-                    <div class="flex animate-scroll-left">
-                        <!-- 原内容 + 复制内容确保无缝循环 -->
-                        <div class="flex gap-6 whitespace-nowrap pr-6">
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">友情测试</span>
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">艺术摄影</span>
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">极简风格</span>
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">黑白摄影</span>
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">创意设计</span>
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">互动体验</span>
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">视觉艺术</span>
-                        </div>
-                        <div class="flex gap-6 whitespace-nowrap pr-6">
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">友情测试</span>
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">艺术摄影</span>
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">极简风格</span>
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">黑白摄影</span>
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">创意设计</span>
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">互动体验</span>
-                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">视觉艺术</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(tagsContainer);
-        }
-        
-        // 事件监听
-        yesBtn.addEventListener('click', showCelebration);
-        noBtn.addEventListener('click', showNextQuestion);
-        restartBtn.addEventListener('click', resetGame);
-        
-        // 移动端触摸事件支持
-        yesBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            showCelebration();
-        });
-        
-        noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            showNextQuestion();
-        });
-        
-        restartBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            resetGame();
-        });
-        
-        // 初始化鼠标跟随效果
-        initMouseFollowEffect();
-        
-        // 初始化文字渐入效果
-        initTextReveal();
-        
-        // 初始化无限滚动标签
-        initInfiniteScrollTags();
-        
-        // 窗口大小改变时重新定位按钮（如果它们处于随机位置）
-        window.addEventListener('resize', () => {
-            if (noBtn.style.position === 'fixed') {
-                moveButtonsRandomly();
-            }
-        });
-    </script>
+    <!-- 底部版权 -->
+    <div class="relative z-10 text-center mt-16 md:mt-24 text-gray-600 text-xs">
+        <p>友情测试合集 · 艺术摄影风 · 仅供娱乐</p>
+    </div>
 </body>
 </html>

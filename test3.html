@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>熬夜追剧测试 | 艺术摄影风</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#000000',
+                        secondary: '#111111',
+                        accent: '#ffffff',
+                        light: '#f8f8f8',
+                        gray: {
+                            100: '#f8f8f8',
+                            200: '#e5e5e5',
+                            300: '#d4d4d4',
+                            400: '#a3a3a3',
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'ping-slow': 'ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite',
+                        'scroll-left': 'scrollLeft 30s linear infinite',
+                        'scroll-right': 'scrollRight 30s linear infinite',
+                    },
+                    keyframes: {
+                        'pulse-slow': {
+                            '0%, 100%': { opacity: 1 },
+                            '50%': { opacity: 0.4 },
+                        },
+                        'ping-slow': {
+                            '0%': { transform: 'scale(1)', opacity: 1 },
+                            '75%, 100%': { transform: 'scale(2)', opacity: 0 },
+                        },
+                        'scrollLeft': {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        'scrollRight': {
+                            '0%': { transform: 'translateX(-50%)' },
+                            '100%': { transform: 'translateX(0)' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .btn-transition {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .scale-animation {
+                animation: scale 0.5s ease-out;
+            }
+            .confetti {
+                position: absolute;
+                opacity: 0;
+            }
+            .bg-blur {
+                backdrop-filter: blur(8px);
+            }
+            .text-reveal {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 0.8s ease, transform 0.8s ease;
+            }
+            .text-reveal.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .glass-effect {
+                backdrop-filter: blur(10px);
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+            .metal-effect {
+                position: relative;
+                overflow: hidden;
+            }
+            .metal-effect::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(0,0,0,0.1) 100%);
+                z-index: 0;
+            }
+        }
+        
+        @keyframes scale {
+            0% { transform: scale(0.8); opacity: 0; }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes followMouse {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            10% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            90% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+        }
+        
+        .mouse-follower {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            animation: followMouse 1.5s ease-out forwards;
+        }
+        
+        @keyframes celebrate {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .celebrate-animation {
+            animation: celebrate 0.8s ease-out forwards;
+        }
+        
+        @keyframes scrollLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        @keyframes scrollRight {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+        
+        .animate-scroll-left {
+            animation: scrollLeft 30s linear infinite;
+        }
+        
+        .animate-scroll-right {
+            animation: scrollRight 30s linear infinite;
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        .animate-ping-slow {
+            animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 bg-black text-white transition-all duration-700 overflow-x-hidden relative">
+    <div class="fixed inset-0 z-0">
+        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/b44c977a458e419b978b16902966289a~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260129173231FB34081249C8AF2ABBF4&rrcfp=f06b921b&x-expires=1772271174&x-signature=G%2FRpuSJliUhahKn8IJMJV%2BAHqK0%3D" 
+             alt="艺术背景" 
+             class="w-full h-full object-cover opacity-60 filter grayscale">
+    </div>
+    
+    <div id="mouse-follow-container" class="fixed inset-0 pointer-events-none z-10"></div>
+    
+    <div class="absolute top-0 left-0 w-full h-px bg-gray-800"></div>
+    <div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+    <div class="absolute top-0 left-0 h-full w-px bg-gray-800"></div>
+    <div class="absolute top-0 right-0 h-full w-px bg-gray-800"></div>
+    
+    <div class="absolute top-6 right-6 z-20 inline-flex items-center gap-3 px-4 py-2 glass-effect rounded-lg border border-gray-800">
+        <div class="relative">
+            <div class="h-3 w-3 rounded-full bg-white/80 animate-pulse-slow"></div>
+            <div class="absolute inset-0 h-3 w-3 rounded-full bg-white/30 animate-ping-slow"></div>
+        </div>
+        <span class="text-sm text-gray-300">熬夜追剧测试进行中</span>
+    </div>
+    
+    <div id="app-container" class="w-full max-w-md text-center relative z-10">
+        <div id="question-container" class="mb-12 p-6 md:p-8 glass-effect rounded-lg shadow-lg border border-gray-800 scale-animation backdrop-blur-md">
+            <div class="mb-8">
+                <h2 class="text-[clamp(1.2rem,4vw,1.8rem)] font-light text-white tracking-widest">友情测试</h2>
+                <div class="mt-2 h-px w-16 mx-auto bg-gray-600"></div>
+            </div>
+            
+            <h1 id="question-text" class="text-[clamp(1.5rem,5vw,2.5rem)] font-light text-white transition-all duration-700 mb-6">
+                你愿意陪我熬夜追完一整部剧吗
+            </h1>
+            
+            <div class="mt-4 h-px w-24 mx-auto bg-gray-700"></div>
+        </div>
+        
+        <div id="buttons-container" class="flex justify-center gap-6">
+            <button id="yes-btn" class="group relative overflow-hidden rounded-lg p-[1px]">
+                <div class="absolute inset-0 bg-gradient-to-br from-gray-600/80 to-gray-700/80 backdrop-blur-lg">
+                    <div class="absolute -top-4 -right-4 h-12 w-12 rounded-full bg-white/40 blur-md transition-all duration-300 group-hover:h-16 group-hover:w-16 group-hover:bg-white/60"></div>
+                    <div class="absolute -bottom-6 -left-4 h-10 w-10 rounded-full bg-white/30 blur-md transition-all duration-300 group-hover:h-14 group-hover:w-14 group-hover:bg-white/50"></div>
+                </div>
+                
+                <div class="relative px-8 py-3 bg-black/40 backdrop-blur-sm rounded-lg border border-gray-700">
+                    <span class="relative z-10 text-white font-light tracking-wide">必须的！</span>
+                </div>
+            </button>
+            
+            <button id="no-btn" class="group relative overflow-hidden rounded-lg p-[1px]">
+                <div class="absolute inset-0 bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-lg">
+                    <div class="absolute -top-4 -right-4 h-12 w-12 rounded-full bg-white/20 blur-md transition-all duration-300 group-hover:h-16 group-hover:w-16 group-hover:bg-white/40"></div>
+                    <div class="absolute -bottom-6 -left-4 h-10 w-10 rounded-full bg-white/10 blur-md transition-all duration-300 group-hover:h-14 group-hover:w-14 group-hover:bg-white/30"></div>
+                </div>
+                
+                <div class="relative px-8 py-3 bg-black/60 backdrop-blur-sm rounded-lg border border-gray-800">
+                    <span class="relative z-10 text-gray-300 font-light tracking-wide">等等再说</span>
+                </div>
+            </button>
+        </div>
+        
+        <div id="celebration-container" class="hidden celebrate-animation">
+            <div class="p-8 glass-effect rounded-lg shadow-lg border border-gray-800 backdrop-blur-md">
+                <h2 class="text-[clamp(1.5rem,5vw,2.2rem)] font-light text-white mb-6">
+                    太感谢你了！
+                </h2>
+                <p class="text-base text-gray-400 mb-8 max-w-xs mx-auto">
+                    熬夜追剧，友情不散！零食我已经准备好，就等你啦～
+                </p>
+                
+                <button id="restart-btn" class="group relative overflow-hidden rounded-lg p-[1px]">
+                    <div class="absolute inset-0 bg-gradient-to-br from-gray-600/80 to-gray-700/80 backdrop-blur-lg">
+                        <div class="absolute -top-4 -right-4 h-12 w-12 rounded-full bg-white/40 blur-md transition-all duration-300 group-hover:h-16 group-hover:w-16 group-hover:bg-white/60"></div>
+                        <div class="absolute -bottom-6 -left-4 h-10 w-10 rounded-full bg-white/30 blur-md transition-all duration-300 group-hover:h-14 group-hover:w-14 group-hover:bg-white/50"></div>
+                    </div>
+                    
+                    <div class="relative px-8 py-3 bg-black/40 backdrop-blur-sm rounded-lg border border-gray-700">
+                        <span class="relative z-10 text-white font-light tracking-wide">再来一次</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 熬夜追剧测试专属追问语句
+        const followUpQuestions = [
+            "就一集，很快的～",
+            "我带零食，你带熬夜精神～",
+            "倍速播放，不耽误睡觉～",
+            "大结局哦，错过必悔～",
+            "陪我看完，我给你捏肩～",
+            "晚上没人陪，只有剧和你～",
+            "熬夜使人快乐，追剧使人加倍～",
+            "明天请假，不怕起不来～",
+            "剧情超精彩，根本停不下来～",
+            "这可是检验友情的熬夜试炼～"
+        ];
+        
+        const questionContainer = document.getElementById('question-container');
+        const questionText = document.getElementById('question-text');
+        const buttonsContainer = document.getElementById('buttons-container');
+        const yesBtn = document.getElementById('yes-btn');
+        const noBtn = document.getElementById('no-btn');
+        const celebrationContainer = document.getElementById('celebration-container');
+        const restartBtn = document.getElementById('restart-btn');
+        
+        // 熬夜追剧测试初始问题
+        const initialQuestion = "你愿意陪我熬夜追完一整部剧吗";
+        
+        function getRandomPosition(button) {
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            const buttonWidth = button.offsetWidth;
+            const buttonHeight = button.offsetHeight;
+            const questionRect = questionContainer.getBoundingClientRect();
+            
+            let maxX = viewportWidth - buttonWidth - 20;
+            let maxY = viewportHeight - buttonHeight - 20;
+            const minX = 20;
+            const minY = 20;
+            
+            let x = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
+            let y = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
+            
+            if (
+                x < questionRect.right &&
+                x + buttonWidth > questionRect.left &&
+                y < questionRect.bottom &&
+                y + buttonHeight > questionRect.top
+            ) {
+                return getRandomPosition(button);
+            }
+            
+            return { x, y };
+        }
+        
+        function moveButtonsRandomly() {
+            const yesPos = getRandomPosition(yesBtn);
+            let noPos = getRandomPosition(noBtn);
+            
+            const yesRect = {
+                x: yesPos.x,
+                y: yesPos.y,
+                width: yesBtn.offsetWidth,
+                height: yesBtn.offsetHeight
+            };
+            
+            while (
+                noPos.x < yesRect.x + yesRect.width &&
+                noPos.x + noBtn.offsetWidth > yesRect.x &&
+                noPos.y < yesRect.y + yesRect.height &&
+                noPos.y + noBtn.offsetHeight > yesRect.y
+            ) {
+                noPos = getRandomPosition(noBtn);
+            }
+            
+            yesBtn.style.position = 'fixed';
+            yesBtn.style.left = `${yesPos.x}px`;
+            yesBtn.style.top = `${yesPos.y}px`;
+            yesBtn.classList.add('scale-animation');
+            setTimeout(() => yesBtn.classList.remove('scale-animation'), 500);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = `${noPos.x}px`;
+            noBtn.style.top = `${noPos.y}px`;
+            noBtn.classList.add('scale-animation');
+            setTimeout(() => noBtn.classList.remove('scale-animation'), 500);
+        }
+        
+        function showCelebration() {
+            questionContainer.classList.add('hidden');
+            buttonsContainer.classList.add('hidden');
+            celebrationContainer.classList.remove('hidden');
+            createCelebrationElements();
+        }
+        
+        function createCelebrationElements() {
+            const container = document.body;
+            const shapes = ['circle', 'square', 'line'];
+            
+            for (let i = 0; i < 80; i++) {
+                const element = document.createElement('div');
+                element.classList.add('confetti');
+                
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                if (shape === 'circle') {
+                    element.style.width = `${Math.random() * 10 + 3}px`;
+                    element.style.height = element.style.width;
+                    element.style.borderRadius = '50%';
+                } else if (shape === 'square') {
+                    element.style.width = `${Math.random() * 10 + 3}px`;
+                    element.style.height = element.style.width;
+                } else {
+                    element.style.width = `${Math.random() * 15 + 5}px`;
+                    element.style.height = '1px';
+                }
+                
+                const colors = ['#ffffff', '#e5e5e5', '#a3a3a3', '#525252'];
+                element.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                element.style.opacity = Math.random() * 0.7 + 0.3;
+                
+                element.style.left = `${Math.random() * 100}%`;
+                element.style.top = `-${Math.random() * 20 + 10}px`;
+                element.style.transform = `rotate(${Math.random() * 360}deg)`;
+                element.style.animation = `fall ${Math.random() * 5 + 3}s linear forwards`;
+                
+                container.appendChild(element);
+                
+                setTimeout(() => {
+                    if (element.parentNode) {
+                        element.parentNode.removeChild(element);
+                    }
+                }, 8000);
+            }
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fall {
+                    0% {
+                        transform: translateY(0) rotate(0deg);
+                        opacity: 0.8;
+                    }
+                    100% {
+                        transform: translateY(${window.innerHeight}px) rotate(360deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        function showNextQuestion() {
+            const randomIndex = Math.floor(Math.random() * followUpQuestions.length);
+            const nextQuestion = followUpQuestions[randomIndex];
+            
+            questionText.textContent = nextQuestion;
+            questionText.classList.add('scale-animation');
+            setTimeout(() => {
+                questionText.classList.remove('scale-animation');
+            }, 500);
+            
+            moveButtonsRandomly();
+        }
+        
+        function resetGame() {
+            questionText.textContent = initialQuestion;
+            celebrationContainer.classList.add('hidden');
+            questionContainer.classList.remove('hidden');
+            buttonsContainer.classList.remove('hidden');
+            
+            yesBtn.style.position = 'static';
+            noBtn.style.position = 'static';
+            
+            document.querySelectorAll('.confetti').forEach(el => {
+                el.remove();
+            });
+        }
+        
+        function initMouseFollowEffect() {
+            const container = document.getElementById('mouse-follow-container');
+            let lastX = 0, lastY = 0;
+            const minDistance = 60;
+            
+            document.addEventListener('mousemove', (e) => {
+                const currentX = e.clientX;
+                const currentY = e.clientY;
+                
+                const distance = Math.sqrt(
+                    Math.pow(currentX - lastX, 2) + Math.pow(currentY - lastY, 2)
+                );
+                
+                if (distance > minDistance) {
+                    createFollowElement(currentX, currentY);
+                    lastX = currentX;
+                    lastY = currentY;
+                }
+            });
+            
+            function createFollowElement(x, y) {
+                const element = document.createElement('div');
+                element.classList.add('mouse-follower');
+                
+                const shapes = ['circle', 'square', 'line'];
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                
+                if (shape === 'circle') {
+                    element.style.width = '6px';
+                    element.style.height = '6px';
+                    element.style.borderRadius = '50%';
+                } else if (shape === 'square') {
+                    element.style.width = '5px';
+                    element.style.height = '5px';
+                } else {
+                    element.style.width = '12px';
+                    element.style.height = '1px';
+                }
+                
+                const opacity = Math.random() * 0.5 + 0.3;
+                element.style.backgroundColor = `rgba(255, 255, 255, ${opacity})`;
+                element.style.left = `${x}px`;
+                element.style.top = `${y}px`;
+                
+                container.appendChild(element);
+                
+                setTimeout(() => {
+                    if (element.parentNode) {
+                        element.parentNode.removeChild(element);
+                    }
+                }, 1500);
+            }
+        }
+        
+        function initTextReveal() {
+            const textElements = document.querySelectorAll('#question-text, h2, p');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('text-reveal', 'active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            textElements.forEach(el => {
+                observer.observe(el);
+            });
+        }
+        
+        function initInfiniteScrollTags() {
+            const tagsContainer = document.createElement('div');
+            tagsContainer.className = 'fixed bottom-6 left-0 w-full z-20 pointer-events-none';
+            tagsContainer.innerHTML = `
+                <div class="relative w-full max-w-screen-xl mx-auto overflow-hidden py-4">
+                    <div class="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-black to-transparent z-10"></div>
+                    <div class="flex animate-scroll-left">
+                        <div class="flex gap-6 whitespace-nowrap pr-6">
+                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">友情测试</span>
+                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">艺术摄影</span>
+                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">熬夜追剧</span>
+                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">快乐熬夜</span>
+                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">创意设计</span>
+                        </div>
+                        <div class="flex gap-6 whitespace-nowrap pr-6">
+                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">友情测试</span>
+                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">艺术摄影</span>
+                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">熬夜追剧</span>
+                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">快乐熬夜</span>
+                            <span class="px-4 py-2 rounded-full border border-gray-700 text-gray-300 bg-black/40 backdrop-blur-sm">创意设计</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(tagsContainer);
+        }
+        
+        yesBtn.addEventListener('click', showCelebration);
+        noBtn.addEventListener('click', showNextQuestion);
+        restartBtn.addEventListener('click', resetGame);
+        
+        yesBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            showCelebration();
+        });
+        
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            showNextQuestion();
+        });
+        
+        restartBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            resetGame();
+        });
+        
+        initMouseFollowEffect();
+        initTextReveal();
+        initInfiniteScrollTags();
+        
+        window.addEventListener('resize', () => {
+            if (noBtn.style.position === 'fixed') {
+                moveButtonsRandomly();
+            }
+        });
+    </script>
+</body>
+</html>
