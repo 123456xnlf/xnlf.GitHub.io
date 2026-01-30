@@ -3,3 +3,10 @@
 预览：https://a.tlzj.de5.net
 
 部分内容使用ai生成的
+
+A prank-type website
+
+Preview: https://a.tlzj.de5.net
+
+Some content is generated using AI
+
